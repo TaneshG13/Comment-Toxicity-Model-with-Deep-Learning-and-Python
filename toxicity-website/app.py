@@ -1,10 +1,10 @@
+import os
 from flask import Flask, render_template, request, jsonify
 import tensorflow as tf
 from tensorflow.keras.preprocessing.text import tokenizer_from_json
 import json
 import numpy as np
 from tensorflow.keras.preprocessing.sequence import pad_sequences
-import os
 
 # Load the trained model
 model = tf.keras.models.load_model('models\comment_toxicity_detection.h5')
