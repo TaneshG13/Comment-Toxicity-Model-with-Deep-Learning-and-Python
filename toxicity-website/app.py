@@ -7,7 +7,7 @@ import numpy as np
 from tensorflow.keras.preprocessing.sequence import pad_sequences
 
 # Load the trained model
-model = tf.keras.models.load_model('models\comment_toxicity_detection.h5')
+model = tf.keras.models.load_model('models/comment_toxicity_detection.h5')
 
 # Load the tokenizer
 with open('models/tokenizer.json', 'r') as f:
@@ -67,4 +67,5 @@ def predict():
 
 # Run the Flask app
 if __name__ == '__main__':
-    app.run(debug=True,host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
