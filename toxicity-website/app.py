@@ -9,12 +9,15 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences
 # Initialize Flask app
 app = Flask(__name__)
 
-# Load the trained model
+# Load the TFLite model
 try:
-    model_path = os.path.join('models', 'comment_toxicity_detection.h5')
-    model = tf.keras.models.load_model(model_path)
+    model_path = os.path.join('models', 'comment_toxicity_detection.tflite')
+    interpreter = tf.lite.Interpreter(model_path=model_path)
+    interpreter.allocate_tensors()
+    input_details = interpreter.get_input_details()
+    output_details = interpreter.get_output_details()
 except Exception as e:
-    raise RuntimeError(f"Error loading the model: {e}")
+    raise RuntimeError(f"Error loading the TFLite model: {e}")
 
 # Load the tokenizer
 try:
@@ -34,13 +37,21 @@ def predict_toxicity(comment):
         # Tokenize and pad the comment
         sequences = tokenizer.texts_to_sequences([comment])
         padded_sequence = pad_sequences(sequences, maxlen=200, padding='post', truncating='post')
+        input_data = np.array(padded_sequence, dtype=np.float32)
 
-        # Get prediction from the model
-        prediction = model.predict(padded_sequence, verbose=0)
-        
+        # Set the input tensor
+        interpreter.set_tensor(input_details[0]['index'], input_data)
+
+        # Run inference
+        interpreter.invoke()
+
+        # Get the output tensor
+        output_data = interpreter.get_tensor(output_details[0]['index'])
+        prediction = output_data[0]
+
         # Format the results
         results = {}
-        for label, score in zip(y_columns, prediction[0]):
+        for label, score in zip(y_columns, prediction):
             results[label] = {
                 'score': round(float(score), 2),
                 'label': 'Yes' if score > 0.5 else 'No'
