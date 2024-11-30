@@ -65,12 +65,12 @@ python app.py
 ## 🖼 Screenshots
 
 ### 1. Home Page
-![Home Page](/screenshots/sc1.png)
-![Home Page](/screenshots/sc3.png)
+![Non-Toxic Comment](/Screenshots/sc1.png)
+![Toxic Comment](/Screenshots/sc3.png)
 
 ### 2. Toxicity Analysis Result
-![Analysis Result](/screenshots/sc2.png)
-![Analysis Result](/screenshots/sc4.png)
+![Non-Toxic Comment Result](/Screenshots/sc2.png)
+![Toxic Comment Result](/Screenshots/sc4.png)
 
 ## 📊 Model Performance
 
